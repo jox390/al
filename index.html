@@ -179,7 +179,7 @@
 
         /* ========== الهيرو ========== */
         .hero {
-            background: #000; /* خلفية سوداء بسيطة كاحتياط */
+            background: #000; /* خلفية سوداء بسيطة لا تغطي الفيديو */
             color: var(--white);
             text-align: center;
             padding: 120px 30px;
@@ -193,8 +193,8 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 0; /* تم رفع الطبقة لتظهر فوق الخلفية السوداء */
-            opacity: 0.6;
+            z-index: 0; /* تم رفعه ليكون فوق خلفية القسم */
+            opacity: 0.6; 
             filter: brightness(0.4) contrast(1.2); /* تعتيم الفيديو أكثر لبروز النص الأبيض والذهبي */
         }
         #hero-canvas {
@@ -204,7 +204,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1; /* فوق الفيديو وتحت النص */
+            z-index: 1; /* الجزيئات فوق الفيديو */
         }
         .hero::before {
             content: '';
@@ -242,7 +242,7 @@
         }
         .hero-content {
             position: relative;
-            z-index: 2; /* في المقدمة تماماً لضمان وضوح النص */
+            z-index: 2; /* النص في المقدمة تماماً */
             max-width: 700px;
             margin: 0 auto;
         }
@@ -1269,9 +1269,9 @@
 
 <!-- الهيرو -->
     <section class="hero">
-        <!-- تم تعيين الفيديو الجديد ahmz.mp4 كخلفية لقسم الهيرو -->
+        <!-- تشغيل الفيديو الجديد aa1.mp4 كخلفية -->
         <video autoplay muted loop playsinline class="hero-video" id="mainVideo" poster="images/hero-placeholder.jpg" preload="auto">
-            <source src="ahmz.mp4" type="video/mp4">
+            <source src="aa1.mp4" type="video/mp4">
             متصفحك لا يدعم تشغيل الفيديو.
         </video>
 
@@ -1893,17 +1893,16 @@
             updateCartUI();
             initHeroParticles();
 
-            // التأكد من تشغيل الفيديو ومعالجة الأخطاء
+            // التأكد من تشغيل الفيديو الجديد ومعالجة أي خطأ في التحميل
             const heroVideo = document.getElementById('mainVideo');
             if (heroVideo) {
-                heroVideo.load(); // إعادة تحميل المصدر للتأكد
+                heroVideo.load();
                 heroVideo.play().catch(() => {
                     console.log('التشغيل التلقائي بانتظار تفاعل المستخدم');
                 });
                 
-                // تنبيه في حال وجود خطأ في ملف الفيديو
                 heroVideo.addEventListener('error', function() {
-                    console.error('❌ خطأ: لم يتم العثور على ملف ahmz.mp4 في المجلد الحالي!');
+                    console.error('❌ خطأ: لم يتم العثور على ملف aa1.mp4 في مجلد الموقع!');
                 });
             }
 
