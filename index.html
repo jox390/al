@@ -179,12 +179,23 @@
 
         /* ========== الهيرو ========== */
         .hero {
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            background: #000; /* خلفية سوداء بسيطة كاحتياط */
             color: var(--white);
             text-align: center;
             padding: 120px 30px;
             position: relative;
             overflow: hidden;
+        }
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0; /* تم رفع الطبقة لتظهر فوق الخلفية السوداء */
+            opacity: 0.6;
+            filter: brightness(0.4) contrast(1.2); /* تعتيم الفيديو أكثر لبروز النص الأبيض والذهبي */
         }
         #hero-canvas {
             position: absolute;
@@ -193,7 +204,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0;
+            z-index: 1; /* فوق الفيديو وتحت النص */
         }
         .hero::before {
             content: '';
@@ -231,7 +242,7 @@
         }
         .hero-content {
             position: relative;
-            z-index: 1;
+            z-index: 2; /* في المقدمة تماماً لضمان وضوح النص */
             max-width: 700px;
             margin: 0 auto;
         }
@@ -242,6 +253,7 @@
             margin-bottom: 14px;
             letter-spacing: -1px;
             line-height: 1.3;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); /* ظل خلف النص لزيادة الوضوح */
         }
         .hero h1 span {
             color: var(--gold);
@@ -253,6 +265,7 @@
             margin-bottom: 30px;
             line-height: 1.8;
             font-weight: 400;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
         }
         .cta {
             display: inline-block;
@@ -1234,7 +1247,7 @@
 
     <!-- الشريط العلوي -->
     <div class="top-bar">
-        🕐 نفتح يومياً من <span>7 صباحاً</span> حتى <span>12 منتصف الليل</span> | توصيل مجاني للطلبات فوق <span>50 جنيه</span>
+        🕐 نفتح يومياً من <span>7 صباحاً</span> حتى <span>12 منتصف الليل</span> | توصيل مجاني للطلبات فوق <span>500 جنيه</span>
     </div>
 
     <!-- الهيدر -->
@@ -1256,6 +1269,12 @@
 
 <!-- الهيرو -->
     <section class="hero">
+        <!-- تم تعيين الفيديو الجديد ahmz.mp4 كخلفية لقسم الهيرو -->
+        <video autoplay muted loop playsinline class="hero-video" id="mainVideo" poster="images/hero-placeholder.jpg" preload="auto">
+            <source src="ahmz.mp4" type="video/mp4">
+            متصفحك لا يدعم تشغيل الفيديو.
+        </video>
+
         <canvas id="hero-canvas"></canvas>
         <div class="hero-content">
             <h1>أصل الـ <span>بيتزا</span> الإيطالية 🍕</h1>
@@ -1873,6 +1892,21 @@
             renderMenu('all');
             updateCartUI();
             initHeroParticles();
+
+            // التأكد من تشغيل الفيديو ومعالجة الأخطاء
+            const heroVideo = document.getElementById('mainVideo');
+            if (heroVideo) {
+                heroVideo.load(); // إعادة تحميل المصدر للتأكد
+                heroVideo.play().catch(() => {
+                    console.log('التشغيل التلقائي بانتظار تفاعل المستخدم');
+                });
+                
+                // تنبيه في حال وجود خطأ في ملف الفيديو
+                heroVideo.addEventListener('error', function() {
+                    console.error('❌ خطأ: لم يتم العثور على ملف ahmz.mp4 في المجلد الحالي!');
+                });
+            }
+
             // تعيين التبويب النشط
             document.querySelector('.tab-btn.active')?.classList.add('active');
         }
